@@ -1,5 +1,5 @@
 import Commentary from "./Commentary";
-import getRandomInt from "./Utils";
+// import getRandomInt from "./Utils";
 
 export default class Tree {
     #data;
@@ -28,18 +28,23 @@ export default class Tree {
         return comment
     }
 
-    createTree(numberOfComments = 10){
+    async fetchData(url){
+        // let a = await fetch(`https://jsonplaceholder.typicode.com/comments/1`)
+        let a = await fetch(url)
+        let k = await a.json()
+
+        return k
+
+    }
+
+    async createTree(numberOfComments = 10){
         let a = [];
         for (let i=0; i<numberOfComments; i++){
-            let j = this.createComment('Author' + i,  'Lorem ipsum' + i)
-
-            if (getRandomInt(6) %5 == 0 && i !== 0) {
-                a[a.length-1].children.push({comment: j})
-            } else {
-                a.push({comment: j, children: []})
-            }
+            this.fetchData(`https://jsonplaceholder.typicode.com/comments/${i+1}`)
+            .then(json =>  this.createComment(json.email,  json.body))
+            .then(com => {a.push({id: i, comment: com})})
         }
-        console.log(a)
+        console.log(a);
         this.data = a;
     }
 }
