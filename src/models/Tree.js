@@ -1,30 +1,30 @@
 import Commentary from "./Commentary";
-import getRandomInt from "./Utils";
+import getRandomInt, {getSubGraph, makeTree} from './Utils';
+import {baseUserName} from '../assets/Settings';
 
 export default class Tree {
     #data;
 
     constructor() {
 
-        this.data = [{
-            comment: 'Lorem0',
-            children: [{comment: 'Lorem2'}, {comment: 'Lorem3'}, {comment: 'Lorem4', children: [{comment: 'Lorem5'}]}]
-        }, {
-            comment: 'Lorem11',
-            children: [{comment: 'Lorem21'}, {comment: 'Lorem31'}, {
-                comment: 'Lorem41',
-                children: [{comment: 'Lorem51'}]
-            }]
-        }]
-        this.createTree(10)
+        this.data = []
+        this.show = false;
+        this.createTree(20);
     }
 
     get Data() {
         return this.data
     }
 
+    get ListOfComments(){
+        const num = 12;
+        console.log(getSubGraph(this.Data, num));
+
+        return this.Data
+    }
+
     set Data(data) {
-        this.data = data
+        this.data = data;
     }
 
     createComment(author, text) {
@@ -33,12 +33,9 @@ export default class Tree {
     }
 
     async fetchData(url) {
-        // let a = await fetch(`https://jsonplaceholder.typicode.com/comments/1`)
         let a = await fetch(url)
         let k = await a.json()
-
         return k
-
     }
 
     createTree(numberOfComments = 10) {
@@ -60,26 +57,19 @@ export default class Tree {
                 })
             Promises.push(Promise)
         }
-        Promise.all(Promises).then(() => {
-            console.log(a)
-            // eslint-disable-next-line no-unused-vars
-            let testTree = [];
-            a.forEach((el) => {
-                if (el.parent !== null) {
-                    let d = testTree.find((item) => {
-                        console.log(item)
-                        item.id == el.parent
-                    })
-                    console.log(d)
-                } else {
-                    testTree.push({comment: el.comment, children: [], id: el.id})
-                }
-            })
 
-            console.log(testTree)
+        Promise.all(Promises).then(() => {
+            let m = makeTree(a)
+            this.data = m
+            this.show = true
         })
 
 
-        this.data = a;
+    }
+
+    // eslint-disable-next-line no-unused-vars
+    newCommentary({author = baseUserName, text= 'lorem'}, branch){
+        let a = {children: [], level: branch.level+1, parent: branch.id, id: getRandomInt(10**6), comment: this.createComment(author, text)}
+        branch.children.push(a)
     }
 }

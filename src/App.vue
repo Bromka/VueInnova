@@ -5,8 +5,8 @@
         </PostComp>
         <div class="wrap">
             <div class="comments">
-                <div v-for="(item, index) in testData.Data" :key="index">
-                    <TreeComp :branch="item" :first="true"/>
+                <div v-for="(item, index) in treeModel.ListOfComments" :key="index">
+                    <TreeComp :branch="item" :first="true" v-if="treeModel.show" :tree-model="treeModel"/>
                 </div>
             </div>
         </div>
@@ -18,6 +18,7 @@
     import Tree from './models/Tree'
     import TreeComp from './components/Tree'
     import PostComp from './components/Post'
+    // eslint-disable-next-line no-undef
 
     export default {
         name: 'App',
@@ -26,7 +27,7 @@
         },
         data: () => {
             return {
-                testData: new Tree()
+                treeModel: new Tree(),
             }
         },
         mounted() {

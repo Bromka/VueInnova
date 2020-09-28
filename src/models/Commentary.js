@@ -7,13 +7,13 @@ export default class Commentary {
   #basepoints;
   #plus_usersName = [];
   #minus_usersName = [];
+  #spoiler = false
 
   constructor(author, text) {
     this.#author = author;
     this.#text = text;
     this.#id = getRandomInt(10 ** 8);
     this.#basepoints = getRandomInt((10 ** 3) * 2) - 500;
-
   }
 
   get Data() {
@@ -25,7 +25,14 @@ export default class Commentary {
   }
 
 //    Active
+  set Spoiler(val){
 
+    this.#spoiler = val
+  }
+
+  get Spoiler(){
+    return this.#spoiler
+  }
   get minus() {
     return this.#minus_usersName;
   }
@@ -43,7 +50,6 @@ export default class Commentary {
       this.#plus_usersName.splice(i, 1);
     }
   }
-
 
   get plus() {
     return this.#plus_usersName;
