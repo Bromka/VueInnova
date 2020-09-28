@@ -1,5 +1,5 @@
 import Commentary from "./Commentary";
-import getRandomInt, {getSubGraph, makeTree} from './Utils';
+import getRandomInt, {makeTree} from './Utils';
 import {baseUserName} from '../assets/Settings';
 
 export default class Tree {
@@ -9,7 +9,7 @@ export default class Tree {
 
         this.data = []
         this.show = false;
-        this.createTree(20);
+        this.createTree(30);
     }
 
     get Data() {
@@ -17,10 +17,9 @@ export default class Tree {
     }
 
     get ListOfComments(){
-        const num = 12;
-        console.log(getSubGraph(this.Data, num));
 
         return this.Data
+
     }
 
     set Data(data) {
@@ -59,7 +58,10 @@ export default class Tree {
         }
 
         Promise.all(Promises).then(() => {
-            let m = makeTree(a)
+            this.serverComments = [...a]
+            let temp = makeTree(a, 12)
+            let m = temp.dataTree
+            this.otherCommentsCounts = temp.otherComments
             this.data = m
             this.show = true
         })
@@ -71,5 +73,14 @@ export default class Tree {
     newCommentary({author = baseUserName, text= 'lorem'}, branch){
         let a = {children: [], level: branch.level+1, parent: branch.id, id: getRandomInt(10**6), comment: this.createComment(author, text)}
         branch.children.push(a)
+    }
+
+    loadAll(){
+        console.log(this.serverComments);
+        let temp = makeTree(this.serverComments)
+        let m = temp.dataTree
+        this.otherCommentsCounts = temp.otherComments
+        this.data = m
+        this.show = true
     }
 }

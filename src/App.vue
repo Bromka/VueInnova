@@ -8,6 +8,7 @@
                 <div v-for="(item, index) in treeModel.ListOfComments" :key="index">
                     <TreeComp :branch="item" :first="true" v-if="treeModel.show" :tree-model="treeModel"/>
                 </div>
+                <div class="morecomments" @click="loadAll" v-show="false || treeModel.otherCommentsCounts != 0">Загрузить еще комментарии ({{treeModel.otherCommentsCounts}} шт.)</div>
             </div>
         </div>
 
@@ -31,6 +32,13 @@
             }
         },
         mounted() {
+        },
+        methods: {
+          loadAll: function() {
+            console.log('asdasdas');
+            this.treeModel.loadAll();
+            this.$forceUpdate()
+          }
         }
     }
 </script>
@@ -209,6 +217,10 @@
         border-top: none;
         border-bottom: none;
         overflow: hidden;
+    }
+    .morecomments{
+        padding: 20px;
+        background-color: #b5afaf;
     }
 
 </style>
